@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)$ugor$ts-1(-11z=zf02ux-(%35t*i4-)mo=wcmtl7dmca0+x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -51,6 +51,7 @@ INSTALLED_APPS += EXTERNAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -135,10 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ADDED MANUALLY
 
-STATICFILES_DIRS = [BASE_DIR / 'static' ]
-STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
-
-
+# Change these lines in your settings.py
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Simplified path
 
 MESSAGE_TAGS = {
     messages.ERROR:'danger',
@@ -152,3 +154,18 @@ MEDIA_URL = '/media/'
 
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Add this STORAGES configuration
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Add this to enable whitenoise to serve media files
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_SERVE_STATIC_WITH_CDN = False
