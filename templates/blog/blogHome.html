@@ -1,0 +1,194 @@
+{% extends 'baseBlog.html' %}
+{% load static %}
+{% block title %}
+Blog
+{% endblock title %}
+{% block css_links %}
+<link rel="stylesheet" href="{%static 'css/blogHome.css'%}">
+{% endblock css_links %}
+{% block body %}
+{% block main %}
+    <div class="container">
+      <form  method='get' action='{%url 'blogSearch'%}'>
+      <div class="position-sticky" style="top: 2rem">
+        <div class="search-input-container">
+          <input
+            type="text"
+            name="query"
+            id="query"
+            class="input"
+            placeholder="Search..."
+          />
+          <button class="search__btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+            >
+              <path
+                d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"
+                fill="#efeff1"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+      {% for top_post in top_viewed_posts|slice:":1" %}
+        <div class=" row p-4 p-md-4 mb-4 rounded text-body-emphasis bg-body-secondary shadow" style="
+        background: url({{top_post.thumbnail.url}});
+        background-position: center;
+        background-blend-mode: overlay;
+        background-size: cover;
+    ">
+            <div class="col-md-6 px-0" style="
+            backdrop-filter: blur(2px);
+        ">
+              <div class="row g-0">
+              <h1 class="display-4 fst-italic">{{top_post.title}}</h1>
+              <p class="lead my-3">{{top_post.content|truncatechars:170|safe}}</p>
+              <p class="lead mb-0"><a href="{{top_post.slug}}" class="text-body-emphasis fw-bold stretched-link">Continue reading...</a></p>
+              <p class="postViews"> <span id="viewsCount" class="viewsCount"><strong>{{top_post.views}}</strong></span> views</p>
+              <div class=" d-none d-lg-block">
+            </div>
+            </div>
+            </div>
+            
+          </div>
+          {% endfor %}
+          <div class="row my-2 d-flex">
+          {% for top_post in allPosts|slice:"1:5" %}
+            <div class="col-6 mt-2">
+            <div class="col-md-12 pt-3 p-1 px-3 rounded bg-dark shadow" style="
+            background: url({{top_post.thumbnail.url}});
+            background-position: center;
+            background-blend-mode: overlay;
+            background-size: cover;
+        ">
+              <div class="row g-0 rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                  <strong class="d-inline-block mb-2 blog-category-home text-primary-emphasis">{{top_post.category}}</strong>
+                  <h3 class="mb-0 text-white">{{top_post.title}}</h3>
+                  <div class="mb-1 text-body-secondary">{{top_post.timeStamp}} Asia/Kathmandu</div>
+                  <p class="card-text mb-auto">{{top_post.content|truncatechars:120|safe}}</p>
+                  <a href="{{top_post.slug}}" class="icon-link gap-1 icon-link-hover stretched-link">
+                    Continue reading
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </a>
+                  <p class="postViews"> <span id="viewsCount" class="viewsCount"><strong>{{top_post.views}}</strong></span> views</p>
+                </div>
+              </div>
+            </div>
+          </div>
+            {% endfor %}
+          </div>
+          <div class="container">
+            <div class="row g-5">
+              <div class="col-md-8">
+                <h3 class="pb-4 my-4 fst-italic border-bottom">From the Archives</h3>
+      
+                <div class="row mb-2">
+                  {% for top_post in allPosts|slice:"5:" %}
+                    <div class="col-md-6 pt-3 rounded bg-dark shadow" style="
+                    background: url({{top_post.thumbnail.url}});
+                    background-position: center;
+                    background-blend-mode: overlay;
+                    background-size: cover;
+                ">
+                      <div class="row g-0  border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                          <strong class="d-inline-block mb-2 blog-category-home text-primary-emphasis">{{top_post.category}}</strong>
+                          <h3 class="mb-0 text-white">{{top_post.title}}</h3>
+                          <div class="mb-1 text-body-secondary">{{top_post.timeStamp}} Asia/Kathmandu</div>
+                          <p class="card-text mb-auto">{{top_post.content|truncatechars:150|safe}}</p>
+                          <a href="{{top_post.slug}}" class="icon-link gap-1 icon-link-hover stretched-link">
+                            Continue reading
+                            <i class="fa-solid fa-chevron-right"></i>
+                          </a>
+                          <p class="postViews"> <span id="viewsCount" class="viewsCount"><strong>{{top_post.views}}</strong></span> views</p>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  
+              </div>
+      
+              <div class="col-md-4">
+                
+                  <div class="p-4 mb-3 bg-body-tertiary rounded">
+                      <!--Section: Sidebar-->
+                      <section class="sticky-top" style="top: 80px;">
+                        <!--Section: Ad-->
+                        <section class="border-bottom pb-4 my-4">
+                            <div class="p-4 mb-3 bg-body-tertiary rounded">
+                                <h4 class="fst-italic about-header-aside text-center">About</h4>
+                                <hr>
+                                <p class="mb-0 about-desc-aside text-left">ReadIt is an immersive blog page that caters to readers of all ages and interests.
+                                     With a focus on storytelling and a love for literature, ReadIt offers book reviews, author
+                                      interviews, and discussions on various genres. It showcases both established and emerging authors,
+                                       encouraging reader engagement and fostering a vibrant community. Whether you're seeking book recommendations,
+                                        literary insights, or a space to connect with fellow book lovers, ReadIt is your go-to destination for a captivating literary experience.</p>
+                              </div>
+                        <!--Section: Ad-->
+                        
+                        
+                        <!--Section: Ad-->
+                      </section>
+                      <!--Section: Sidebar-->
+                  </div>
+      
+                  <div>
+                    <h4 class="fst-italic">Recent posts</h4>
+                    {% for post in recent_posts|slice:":3" %}
+                    <ul class="list-unstyled">
+                      <li>
+                        <a
+                          class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                          href="#"
+                        >
+                        <div class="thumbnail-wrapper-aside">
+                        <img src="{{post.thumbnail.url}}" alt="">
+                        </div>
+                          <div class="col-lg-8">
+                            <h6 class="mb-0">{{post.title}}</h6>
+                            <small class="text-body-secondary"
+                              >{{post.timeStamp}}</small
+                            >
+                          </div>
+                        </a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+      
+                  <div class="p-4">
+                    <h4 class="fst-italic">Archives</h4>
+                    <ol class="list-unstyled mb-0">
+                      {% for date in archive_links %}
+                      <li><a href="{{date.link}}">{{date.month}}/{{date.year}}</a></li>
+                      {% endfor %}
+                    </ol>
+                  </div>
+      
+                  <div class="p-4">
+                    <h4 class="fst-italic">Elsewhere</h4>
+                    <ol class="list-unstyled">
+                      <li><a href="https://github.com/dedyspooky" target="_blank">GitHub</a></li>
+                      <li><a href="https://www.linkedin.com/in/aviral-ale/" target="_blank">LinkedIn</a></li>
+                      <li><a href="https://www.instagram.com/aviral.who_/" target="_blank">Instagram</a></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    {% endblock main %}
+    {% endblock body %}
+    
+   {% block js %}
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script>
+  </script>
+   {% endblock js %}

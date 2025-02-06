@@ -1,0 +1,341 @@
+{% extends 'nav.html' %}
+{% load static %}
+{% load humanize %}
+{% load get_dict %}
+{% block title %} {{post.title}} {% endblock title %}
+{% block css_links %}
+<link rel="stylesheet" href="{%static 'css/blogpost.css'%}">
+<link rel="stylesheet" href="{%static 'css/postbase.css'%}">
+{% endblock css_links %}
+    <!-- Jumbotron -->
+    {% block body %}
+    {% block main %}
+    <nav aria-label="breadcrumb" class='container'>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ post.title}}</li>
+      </ol>
+    </nav>
+    <div id="intro" class="p-5 text-center">
+      <h1 class="mb-0 heading-post h4">{{post.title}}</h1>
+    </div>
+    <!-- Jumbotron -->
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main class="mt-4 mb-5">
+    <div class="container">
+      <!--Grid row-->
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+          <!--Section: Post data-mdb-->
+          <section class="border-bottom mb-4">
+            <div class="thumbnail-wrapper container-fluid">
+            <img src="{{post.thumbnail.url}}"
+              class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
+            </div>
+            <div class="row align-items-center my-4">
+              <div class="col-lg-6 text-center text-lg-start mb-3 m-lg-0">
+                <img src="{%static 'media/img/logo.png'%}" class="authorPhoto shadow-1-strong me-2"
+                  width="35" alt="" loading="lazy" />
+                <span> Published <u>{{post.timeStamp}}</u> by</span>
+                <a href="{%url 'about' %}" class="text-white">{{post.author}}</a>
+                <p class="postViews mx-4"> <span id="viewsCount" class="viewsCount"><strong>{{post.views}}</strong></span> views</p>
+              </div>
+                
+              <div class="col-lg-6 text-center text-lg-end">
+                Author handles:
+                <a href="https://www.facebook.com/aviral069"><button type="button" class="btn btn-outline-light px-3 me-1">
+                  <i class="fab fa-facebook-f"></i>
+                </button></a>
+                <a href="https://twitter.com/dedyspuky"><button type="button" class="btn btn-outline-light px-3 me-1">
+                  <i class="fab fa-twitter"></i>
+                </button></a>
+                <a href="https://www.linkedin.com/in/aviral-ale/"><button type="button" class="btn btn-outline-light px-3 me-1">
+                  <i class="fab fa-linkedin"></i>
+                </button></a>
+                <a href="#comment"><button type="button" class="btn btn-outline-light px-3 me-1">
+                  <i class="fas fa-comments"></i>
+                </button></a>
+              </div>
+            </div>
+          </section>
+          <!--Section: Post data-mdb-->
+
+          <!--Section: Text-->
+          <section>
+            <p>
+              {{post.content|safe}}
+            </p>
+
+          </section>
+          <!--Section: Text-->
+
+          <!--Section: Share buttons-->
+          <section class="text-center border-top border-bottom py-4 mb-4">
+            <p><strong>Share with your friends:</strong></p>
+
+            <a class="share-button" href="https://www.facebook.com/sharer/sharer.php?u=127.0.0.1:8000/blog/{{post.slug}}" target="_blank"><button type="button" class="btn btn-outline-light me-1">
+              <i class="fab fa-facebook-f"></i>
+            </button></a>
+            <a class="share-button" href="https://twitter.com/intent/tweet?url=127.0.0.1:8000/blog/{{post.slug}}" target="_blank"><button type="button" class="btn btn-outline-light me-1">
+              <i class="fab fa-twitter"></i>
+            </button></a>
+            <a class="share-button" href="https://www.linkedin.com/shareArticle?mini=true&url=127.0.0.1:8000/blog/{{post.slug}}" target="_blank"><button type="button" class="btn btn-outline-light me-1">
+              <i class="fab fa-linkedin"></i>
+            </button></a>
+            <a href="#comment"><button type="button" class="btn btn-outline-light me-1">
+              <i class="fas fa-comments me-2"></i>Add comment
+            </button></a>
+          </section>
+          <!--Section: Share buttons-->
+
+          <!--Section: Author-->
+          <section class="border-bottom my-4 pb-4">
+            <div class="row">
+              <div class="col-3">
+                <img src="{%static 'media/img/logo.png'%}"
+                  class="img-fluid" alt="" />
+              </div>
+
+              <div class="col-9">
+                <p class="mb-2"><strong>{{post.author}}</strong></p>
+                <a href="" class="text-dark"><i class="fab fa-facebook-f me-1"></i></a>
+                <a href="" class="text-dark"><i class="fab fa-twitter me-1"></i></a>
+                <a href="" class="text-dark"><i class="fab fa-linkedin me-1"></i></a>
+                <p>
+                  As a ReadIt author, I share my thoughts and stories with a passionate community of readers. I value the power of words and strive to create meaningful reading experiences. Being part of ReadIt means embracing the exchange of ideas and leaving a lasting impact through storytelling. It's a platform that celebrates literature and fosters a vibrant community of readers and authors.
+                </p>
+              </div>
+            </div>
+          </section>
+          <!--Section: Author-->
+
+          <!--Section: Comments-->
+          <section class="border-bottom mb-3" id="comment">
+            <p class="text-center"><strong>Comments: <span class="text-white" >{{comments.count}}</span> </strong></p>
+
+            {% for comment in comments %}
+            <!-- Comment -->
+            <div class="row  mb-4 commentDisplaycontainer">
+              <div class="col-2">
+                <a href="/account/{{comment.user.username}}"><img src="{% if comment.user.profile_picture %}{{comment.user.profile_picture.url}} {% else %} {% static 'media/img/user.png' %} {% endif %}"
+                  class="img-fluid shadow-1-strong rounded-5" alt="" />
+              </div>
+
+              <div class="col-10 commentDisplay rounded-5 border-dark-subtle">
+                <p class="mb-2"><strong class="text-white">@{{comment.user.username}}</strong> </a> <br> <span class="text-small" id="commentTimeStamp">{{comment.timeStamp | naturaltime}}</span> </p>
+                <p class="text-white">
+                  {{comment.comment}}
+                </p>
+                  
+                <div class="reply mx-0">
+                {% if user.is_authenticated %}
+                  <a href="#replyComment{{comment.sno}}"><button class="btn btn-primary btn-sm replyBtn" type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="collapseExample">
+                    
+                    <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-reply"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.499.499 0 0 0 .042-.028l3.984-2.933zM7.8 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"
+                          /></svg>
+                    Reply
+                  </button></a>
+                
+                <div class="collapse" id="replyBox{{comment.sno}}">
+                  <div class="card card-body">
+                    <form action="/blog/postcomment" method="post">
+                      {% csrf_token %}
+                    <div class="input-group col-4 mb-3">
+                      <span class="input-group-text"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-reply"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.499.499 0 0 0 .042-.028l3.984-2.933zM7.8 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"
+                          /></svg
+                      ></span>
+                      <textarea
+                        class="form-control"
+                        name="comment"
+                        id="replyComment{{comment.sno}}"
+                      ></textarea>
+                      <input type="hidden" name="parentSN" value="{{comment.sno}}">
+                    </div>
+                    <input type="hidden" name="postSN" value="{{post.sno}}">
+                    <button type="submit" class="btn btn-outline-light">Reply</button>
+                  </form>
+                  </div>
+                </div>
+              {% else %}
+
+            {% endif %}
+            
+                <div class="replies my-4 rounded-1">
+                  <div class="accordion col-12" id="commentToggle{{comment.sno}}">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#togglereply{{comment.sno}}" aria-expanded="false" aria-controls="collapseTwo">
+                          Toggle Replies
+                        </button>
+                      </h2>
+                      <div id="togglereply{{comment.sno}}" class="accordion-collapse collapse" data-bs-parent="#commentToggle{{comment.sno}}">
+                        <div class="accordion-body">
+                          {% for reply in replyDict|get_val:comment.sno %}
+                  <div class="row my-4 rounded-5">
+                    <div class="col-2">
+                      <a href="/account/{{reply.user.username}}"><img src="{% if reply.user.profile_picture %}{{reply.user.profile_picture.url}} {% else %} {% static 'media/img/user.png' %} {% endif %}"
+                        class="img-fluid shadow-1-strong rounded-5" alt="" />
+                    </div>
+                    <div class="col-10 commentDisplaycontainer">
+                    <div class="col-10 commentDisplay">
+                      <p class="my-0"><strong class="text-white">@{{reply.user.username}}</strong></a> <br> <span class="text-small" id="replyTimeStamp">{{reply.timeStamp | naturaltime}}</span> </p>
+                    <p class="text-white">
+                    {{reply.comment}}
+                      </p>
+                    </div>
+                  <br>
+                </div>
+              </div>
+              {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+            </div>
+            </div>
+            </div>
+            </div>
+            <hr>
+            {% endfor %}
+          </section>
+          <!--Section: Comments-->
+
+          <!--Section: Comment-->
+          <section>
+            <p class="text-center"><strong>Leave a comment</strong></p>
+            {% if user.is_authenticated %}
+
+            <form method = "post" action="/blog/postcomment">
+              {% csrf_token %}
+              <input type="hidden" name="postSN" value="{{post.sno}}">
+              <input type="hidden" name="parentSN" value="">
+              <!-- Comment input -->
+              <div class="form-outline mb-4">
+                <input type="hidden" name="parentSN" value="">
+                <textarea class="form-control" name="comment" id="comment" rows="4" placeholder="Enter your comment here..."></textarea>
+                <label class="form-label" for="comment">Comment as @{{request.user}}</label>
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-outline-light btn-block mb-4">
+                Comment
+              </button>
+            </form>
+            {% else %}
+            <p>Sign up or Login to Comment</p>
+            {% endif %}
+          </section>
+          <!--Section: Comment-->
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-4 mb-4">
+          <!--Section: Sidebar-->
+          <section class="sticky-top" style="top: 80px;">
+            <!--Section: Ad-->
+            <section class="border-bottom pb-4 mb-4">
+                <div class="p-4 mb-3 bg-body-tertiary rounded">
+                    <h4 class="fst-italic about-header-aside text-center">About</h4>
+                    <hr>
+                    <p class="mb-0 about-desc-aside text-left">ReadIt is an immersive blog page that caters to readers of all ages and interests.
+                         With a focus on storytelling and a love for literature, ReadIt offers book reviews, author
+                          interviews, and discussions on various genres. It showcases both established and emerging authors,
+                           encouraging reader engagement and fostering a vibrant community. Whether you're seeking book recommendations,
+                            literary insights, or a space to connect with fellow book lovers, ReadIt is your go-to destination for a captivating literary experience.</p>
+                  </div>
+                  <hr>
+            <!--Section: Ad-->
+            <div class="d-flex justify-content-center text-center text-lg-end">
+              <a href="https://www.facebook.com/aviral069"><button type="button" class="btn btn-outline-light px-3 me-1">
+                <i class="fab fa-facebook-f"></i>
+              </button></a>
+              <a href="https://twitter.com/dedyspuky"><button type="button" class="btn btn-outline-light px-3 me-1">
+                <i class="fab fa-twitter"></i>
+              </button></a>
+              <a href="https://www.linkedin.com/in/aviral-ale/"><button type="button" class="btn btn-outline-light px-3 me-1">
+                <i class="fab fa-linkedin"></i>
+              </button></a>
+              <a href="https://github.com/dedyspooky"><button type="button" class="btn btn-outline-light px-3 me-1">
+                <i class="fab fa-github"></i>
+              </button></a>
+            </div>
+          </div>
+            
+            <!--Section: Ad-->
+          </section>
+          <!--Section: Sidebar-->
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+  </main>
+  <!--Main layout-->
+</div>
+  <!--Footer-->
+  <footer class=" text-lg-start">
+    <div class="py-4 text-center">
+      <button type="button" class="btn btn-outline-light btn-lg px-4" onclick="scrollToTop()">
+        Go to top
+      </button>
+    </div>
+
+    <hr class="m-0" />
+
+    <div class="text-center py-4 align-items-center">
+      <p>Follow Creator on social media</p>
+      <a href="https://www.youtube.com/@spooky69" class="btn btn-outline-light m-1" role="button"
+        rel="nofollow" target="_blank">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="mailto:aviralale@gmail.com" class="btn btn-outline-light m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+      </a>
+      <a href="https://instagram.com/aviral.who_" class="btn btn-outline-light m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://github.com/dedyspooky" class="btn btn-outline-light m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </footer>
+  <!--Footer-->
+    {% endblock main %}
+    {% endblock body %}
+    {% block js %}
+    <script>
+      var commentCount = document.getElementByClassName('commentDisplay').length;
+      console.log("Count" + commentCount)
+    </script>
+        <script src="{%static "js/home.js"%}">
+        </script>
+ <script src="{%static 'js/blogPost.js'%}"></script>
+    {% endblock js %}
